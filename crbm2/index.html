@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="中国再生建材碳足迹数据库"
+    />
+    <title>中国固废再生材料碳足迹数据库 | CRBM</title>
+    <link rel="stylesheet" href="./assets/styles.css?v=crbm-static-2" />
+  </head>
+  <body>
+    <header class="hero" id="top">
+      <div class="hero__media" aria-hidden="true"></div>
+      <nav class="topbar" aria-label="页面导航">
+        <a class="brand" href="#top" aria-label="返回顶部">
+          <span class="brand__mark">CR</span>
+          <span>
+            <strong>CRBM</strong>
+            <small>Chine Recycled Building Materials</small>
+          </span>
+        </a>
+        <div class="topbar__links">
+          <a href="#trace">碳足迹追溯</a>
+          <a href="#process">过程计算</a>
+          <a href="#province">省份差异</a>
+        </div>
+      </nav>
+
+      <section class="hero__content" aria-labelledby="page-title">
+        <p class="eyebrow">Chongqing University</p>
+        <h1 id="page-title">中国再生建材碳足迹数据库</h1>
+        <p class="hero__lead">
+          重庆大学环境与生态学院陈志良教授团队
+        </p>
+        <div class="hero__actions">
+          <a class="button button--primary" href="#dashboard">进入数据库</a>
+          <a
+            class="button button--ghost"
+            href="https://huanjing.cqu.edu.cn/info/1304/5856.htm"
+            target="_blank"
+            rel="noreferrer"
+            >团队链接</a
+          >
+        </div>
+        <dl class="hero__stats" aria-label="数据库规模">
+          <div>
+            <dt id="heroProductCount">80</dt>
+            <dd>再生产品</dd>
+          </div>
+          <div>
+            <dt id="heroLinkCount">596</dt>
+            <dd>物料链路</dd>
+          </div>
+          <div>
+            <dt id="heroProvinceCount">14</dt>
+            <dd>省份数据产品</dd>
+          </div>
+        </dl>
+      </section>
+    </header>
+
+    <main class="workspace" id="dashboard">
+      <aside class="control-panel" aria-label="数据库控制面板">
+        <div class="panel-heading">
+          <span class="panel-kicker">Product Console</span>
+          <h2>产品选择与参数</h2>
+        </div>
+
+        <div class="field">
+          <label for="categorySelect">再生建材产品大类</label>
+          <select id="categorySelect"></select>
+        </div>
+
+        <div class="field">
+          <label for="productSelect">产品小类</label>
+          <select id="productSelect"></select>
+        </div>
+
+        <div class="field">
+          <label for="productSearch">快速搜索产品</label>
+          <input id="productSearch" list="productList" type="search" placeholder="输入产品名称" />
+          <datalist id="productList"></datalist>
+        </div>
+
+        <section class="mini-card" aria-labelledby="selectedProductTitle">
+          <p class="mini-card__label">当前产品</p>
+          <h3 id="selectedProductTitle">-</h3>
+          <p id="selectedProductDesc">选择产品后查看碳足迹构成。</p>
+        </section>
+
+        <section class="process-editor" aria-labelledby="processEditorTitle">
+          <div class="process-editor__top">
+            <div>
+              <p class="mini-card__label">可编辑过程参数</p>
+              <h3 id="processEditorTitle">单元过程</h3>
+            </div>
+            <button class="icon-button" id="resetProcessButton" type="button">重置</button>
+          </div>
+          <div id="processInputs" class="process-inputs"></div>
+        </section>
+
+        <p class="source-note">
+          数据来源：该数据集由重庆大学陈志良教授团队开发。
+        </p>
+      </aside>
+
+      <section class="dashboard-grid" aria-live="polite">
+        <section class="metric-card">
+          <span>再生碳足迹</span>
+          <strong id="metricRecycled">-</strong>
+          <small>kgCO2e/t</small>
+        </section>
+        <section class="metric-card">
+          <span>传统碳足迹</span>
+          <strong id="metricTraditional">-</strong>
+          <small>kgCO2e/t</small>
+        </section>
+        <section class="metric-card metric-card--accent">
+          <span>减碳比例</span>
+          <strong id="metricReduction">-</strong>
+          <small>相对传统产品</small>
+        </section>
+        <section class="metric-card">
+          <span>过程合计</span>
+          <strong id="metricProcessTotal">-</strong>
+          <small>当前输入值</small>
+        </section>
+
+        <section class="data-panel data-panel--wide" id="trace">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Traceability</p>
+              <h2>再生产品碳足迹追溯</h2>
+            </div>
+            <span id="sankeyMeta" class="pill">-</span>
+          </div>
+          <div id="sankeyChart" class="chart chart--sankey" role="img" aria-label="碳足迹追溯桑基图"></div>
+        </section>
+
+        <section class="data-panel" id="process">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Process Mix</p>
+              <h2>碳足迹构成</h2>
+            </div>
+            <span id="processTotalBadge" class="pill">-</span>
+          </div>
+          <div id="processChart" class="bar-chart" role="img" aria-label="过程碳足迹柱图"></div>
+        </section>
+
+        <section class="data-panel">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Benchmark</p>
+              <h2>再生建材 vs 传统建材</h2>
+            </div>
+          </div>
+          <div class="compare-layout">
+            <div id="reductionDonut" class="donut" role="img" aria-label="减碳比例环形图"></div>
+            <div id="compareBars" class="compare-bars" role="img" aria-label="传统与再生碳足迹对比"></div>
+          </div>
+        </section>
+
+        <section class="data-panel">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Plausibility</p>
+              <h2>异常值筛查</h2>
+            </div>
+            <span id="anomalyBadge" class="pill">-</span>
+          </div>
+          <div class="anomaly-layout">
+            <div id="anomalyRadar" class="radar" role="img" aria-label="过程比例雷达图"></div>
+            <div id="anomalyList" class="anomaly-list"></div>
+          </div>
+        </section>
+
+        <section class="data-panel data-panel--wide" id="province">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Regional View</p>
+              <h2>中国各省碳足迹差异</h2>
+            </div>
+            <span id="provinceBadge" class="pill">-</span>
+          </div>
+          <div id="provinceSummary" class="province-summary"></div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>省份</th>
+                  <th>碳足迹 kgCO2/t</th>
+                  <th>固废利用率</th>
+                  <th>碳减排量 MtCO2</th>
+                </tr>
+              </thead>
+              <tbody id="provinceTable"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="data-panel data-panel--wide">
+          <div class="section-title">
+            <div>
+              <p class="panel-kicker">Portfolio</p>
+              <h2>数据库概览</h2>
+            </div>
+          </div>
+          <div class="portfolio-layout">
+            <div id="categoryStats" class="category-stats"></div>
+            <div id="topReduction" class="top-list"></div>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>CRBM数据库由重庆大学陈志良教授团队开发</p>
+      <a href="#top">回到顶部</a>
+    </footer>
+
+    <script src="./assets/data.js?v=crbm-static-2"></script>
+    <script src="./assets/app.js?v=crbm-static-2"></script>
+  </body>
+</html>
